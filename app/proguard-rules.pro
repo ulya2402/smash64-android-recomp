@@ -1,0 +1,3 @@
+-keep class org.libsdl.app.** { *; }
+-keep class com.recomp.smash64.NativeBridge { *; }
+-keep class com.recomp.smash64.SmashGameActivity { *; }

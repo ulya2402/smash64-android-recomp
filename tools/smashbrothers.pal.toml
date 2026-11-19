@@ -1,0 +1,21 @@
+# N64Recomp configuration for Super Smash Bros. (Europe) (En,Fr,De)
+# Game ID: NALP | Region: PAL | Revision: 0
+# Expected SHA-256 (.z64): DDC65284E78C301F764D2F5E1E01DE9A017225867A0B9326B73057FB8BDB1DAF
+
+[input]
+entrypoint = 0x80100400
+# Point these to your local decomp ELF and BYOF ROM when running N64Recomp CLI
+elf_path = "build/smashbrothers.pal.elf"
+rom_file_path = "D:/Download/Super Smash Bros. (Europe) (En,Fr,De)/Super Smash Bros. (Europe) (En,Fr,De).z64"
+output_func_path = "../app/src/main/cpp/recomp_generated/funcs"
+
+[patches]
+# Libultra OS functions handled natively by platform_shim / N64ModernRuntime
+stubs = [
+    "osInvalDCache",
+    "osInvalICache",
+    "osWritebackDCache",
+    "osWritebackDCacheAll"
+]
+
+ignored = []

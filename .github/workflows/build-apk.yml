@@ -40,16 +40,17 @@ jobs:
           yes | "$SDKMANAGER" --licenses >/dev/null 2>&1 || true
           "$SDKMANAGER" --install "platforms;android-35" "build-tools;35.0.0" "ndk;27.2.12479018" "cmake;3.22.1"
 
+      - name: Setup Gradle 8.10.2
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.10.2'
+          validate-wrappers: false
+
       - name: Fetch SDL3 Java + Native Sources
         run: |
           if [ ! -d "third_party/SDL" ]; then
             git clone --depth 1 --branch release-3.2.8 https://github.com/libsdl-org/SDL.git third_party/SDL
           fi
-
-      - name: Setup Gradle 8.10.2
-        uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: '8.10.2'
 
       - name: Build Debug APK (arm64-v8a)
         run: gradle assembleDebug --no-daemon

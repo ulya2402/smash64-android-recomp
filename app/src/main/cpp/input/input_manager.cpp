@@ -173,15 +173,16 @@ void InputManager::processEvent(const SDL_Event& ev) {
     updateMergedState();
 }
 
-void InputManager::renderTouchOverlay(int displayW, int displayH, bool enabled, bool editMode) {
-    if (!enabled || !touchVisible_ || displayW <= 0 || displayH <= 0) {
+void InputManager::renderTouchOverlay(bool enabled, bool editMode) {
+    const ImVec2 disp = ImGui::GetIO().DisplaySize;
+    const float w = disp.x;
+    const float h = disp.y;
+    if (!enabled || !touchVisible_ || w <= 0.0f || h <= 0.0f) {
         return;
     }
 
     touchState_ = {};
     ImDrawList* dl = ImGui::GetForegroundDrawList();
-    const float w = static_cast<float>(displayW);
-    const float h = static_cast<float>(displayH);
     const float unit = std::min(w, h) * layout_.scale;
     const int alpha = static_cast<int>(layout_.opacity * 255.0f);
 
@@ -256,15 +257,15 @@ void InputManager::renderTouchOverlay(int displayW, int displayH, bool enabled, 
          IM_COL32(253, 216, 53, alpha), IM_COL32(255, 245, 157, alpha)},
 
         // L / R / Z (Shield & Grab)
-        {"L", ImVec2(w * 0.10f, h * 0.16f), rTrig, BTN_L,
+        {"L", ImVec2(w * 0.07f, h * 0.16f), rTrig, BTN_L,
          IM_COL32(96, 108, 128, alpha), IM_COL32(176, 190, 197, alpha)},
-        {"R", ImVec2(w * 0.90f, h * 0.16f), rTrig, BTN_R,
+        {"R", ImVec2(w * 0.93f, h * 0.16f), rTrig, BTN_R,
          IM_COL32(96, 108, 128, alpha), IM_COL32(176, 190, 197, alpha)},
-        {"Z", ImVec2(w * 0.90f, h * 0.34f), rTrig, BTN_Z,
+        {"Z", ImVec2(w * 0.93f, h * 0.36f), rTrig, BTN_Z,
          IM_COL32(69, 90, 100, alpha), IM_COL32(144, 164, 174, alpha)},
 
         // START (N64 Red)
-        {"START", ImVec2(w * 0.50f, h * 0.11f), rTrig * 0.85f, BTN_START,
+        {"START", ImVec2(w * 0.50f, h * 0.10f), rTrig * 0.85f, BTN_START,
          IM_COL32(229, 57, 53, alpha), IM_COL32(255, 138, 128, alpha)},
 
         // D-Pad (Taunt / Menu)

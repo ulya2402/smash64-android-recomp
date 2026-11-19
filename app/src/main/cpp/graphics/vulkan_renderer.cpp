@@ -350,7 +350,7 @@ bool VulkanRenderer::initImGui(SDL_Window* window) {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGui::StyleColorsDark();
-    ImGui::GetIO().FontGlobalScale = 2.0f;
+    ImGui::GetIO().FontGlobalScale = 1.25f;
 
     ImGui_ImplSDL3_InitForVulkan(window);
     ImGui_ImplVulkan_InitInfo initInfo{};

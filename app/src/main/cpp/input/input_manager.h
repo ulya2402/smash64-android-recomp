@@ -39,16 +39,16 @@ struct TouchPoint {
 };
 
 struct TouchLayoutConfig {
-    float stickX = 0.16f;
-    float stickY = 0.68f;
-    float abX = 0.84f;
-    float abY = 0.70f;
-    float cPadX = 0.78f;
-    float cPadY = 0.42f;
-    float dpadX = 0.30f;
-    float dpadY = 0.82f;
+    float stickX = 0.13f;
+    float stickY = 0.65f;
+    float abX = 0.85f;
+    float abY = 0.68f;
+    float cPadX = 0.76f;
+    float cPadY = 0.36f;
+    float dpadX = 0.27f;
+    float dpadY = 0.78f;
     float scale = 1.0f;
-    float opacity = 0.78f;
+    float opacity = 0.80f;
 };
 
 class InputManager {
@@ -56,7 +56,7 @@ public:
     void init(const std::string& gameDir);
     void shutdown();
     void processEvent(const SDL_Event& ev);
-    void renderTouchOverlay(int displayW, int displayH, bool enabled, bool editMode);
+    void renderTouchOverlay(bool enabled, bool editMode);
 
     void loadLayout();
     void saveLayout() const;

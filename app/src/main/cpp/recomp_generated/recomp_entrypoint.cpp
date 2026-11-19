@@ -43,7 +43,7 @@ int main(int argc, char* argv[]) {
     SDL_Window* window = SDL_CreateWindow(
         "Super Smash Bros. (NALE) - Native ARM64",
         1280, 720,
-        SDL_WINDOW_VULKAN | SDL_WINDOW_FULLSCREEN | SDL_WINDOW_RESIZABLE);
+        SDL_WINDOW_VULKAN | SDL_WINDOW_FULLSCREEN | SDL_WINDOW_HIGH_PIXEL_DENSITY);
     if (!window) {
         LOGE("SDL_CreateWindow failed: %s", SDL_GetError());
         memory.shutdown();
@@ -90,7 +90,8 @@ int main(int argc, char* argv[]) {
         int width = 0, height = 0;
         if (renderer.beginFrame(width, height)) {
             if (showHud) {
-                ImGui::SetNextWindowPos(ImVec2(static_cast<float>(width) * 0.25f, 24.0f), ImGuiCond_FirstUseEver);
+                const float logicalW = ImGui::GetIO().DisplaySize.x;
+                ImGui::SetNextWindowPos(ImVec2(logicalW * 0.25f, 16.0f), ImGuiCond_FirstUseEver);
                 ImGui::Begin("Smash 64 Recomp (NALE)", &showHud, ImGuiWindowFlags_AlwaysAutoResize);
                 ImGui::Text("GPU: %s (%s)", renderer.activeGpuName(),
                             renderer.isUsingCustomTurnip() ? "Turnip" : "System");
@@ -135,7 +136,7 @@ int main(int argc, char* argv[]) {
                 ImGui::End();
             }
 
-            input.renderTouchOverlay(width, height, cfg.touchControlsEnabled, editLayout);
+            input.renderTouchOverlay(cfg.touchControlsEnabled, editLayout);
             renderer.endFrame();
         }
 

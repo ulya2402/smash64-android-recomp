@@ -9,7 +9,7 @@ class SmashGameActivity : SDLActivity() {
     }
 
     override fun getArguments(): Array<String> {
-        val gameDir = File(filesDir, "games/nalp").absolutePath
+        val gameDir = File(filesDir, "games/nale").absolutePath
         return arrayOf(gameDir)
     }
 }

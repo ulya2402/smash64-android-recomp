@@ -12,10 +12,10 @@ struct RecompSymbol {
     RecompFuncPtr fn;
 };
 
-// Entrypoint for Super Smash Bros. (Europe) (En,Fr,De) [NALP]
-constexpr uint32_t kNalpEntrypoint = 0x80100400u;
+// Entrypoint for Super Smash Bros. (USA) [NALE]
+constexpr uint32_t kNaleEntrypoint = 0x80100400u;
 
 RecompFuncPtr lookupFunction(uint32_t vram);
-void nalp_boot_entrypoint(uint8_t* rdram, uint64_t* gpr);
+void nale_boot_entrypoint(uint8_t* rdram, uint64_t* gpr);
 
 }  // namespace smash64::recomp

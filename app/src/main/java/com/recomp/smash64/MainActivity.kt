@@ -52,12 +52,12 @@ import org.json.JSONObject
 import java.io.File
 
 private val ExpectedSha256 =
-    "DDC65284E78C301F764D2F5E1E01DE9A017225867A0B9326B73057FB8BDB1DAF"
+    "15592E79D3C5295CEF4371D4992F0BD25BEC2102FC29644C93E682F7EA99EF3D"
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val gameDir = File(filesDir, "games/nalp").apply { mkdirs() }
+        val gameDir = File(filesDir, "games/nale").apply { mkdirs() }
 
         setContent {
             MaterialTheme(
@@ -121,7 +121,7 @@ class MainActivity : ComponentActivity() {
         )
 
         val json = JSONObject().apply {
-            put("game_id", "NALP")
+            put("game_id", "NALE")
             put("resolution_scale", resScale)
             put("fps_limit", fpsLimit)
             put("vulkan_driver", if (useTurnip) "turnip" else "system")
@@ -146,13 +146,13 @@ private fun LauncherScreen(
     var statusMessage by remember {
         mutableStateOf(
             if (isReady) "ROM terverifikasi di storage privat (${romFile.length() / (1024 * 1024)} MB)."
-            else "Pilih file Super Smash Bros. (Europe) .z64 / .n64 / .v64 / .zip / .chd / .iso."
+            else "Pilih file Super Smash Bros. (USA) .z64 / .n64 / .v64 / .zip / .chd / .iso."
         )
     }
     var verifiedSha by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
-    var resScale by remember { mutableIntStateOf(2) }
+    var resScale by remember { mutableIntStateOf(1) }
     var fpsLimit by remember { mutableIntStateOf(60) }
     var useTurnip by remember { mutableStateOf(false) }
     var touchEnabled by remember { mutableStateOf(true) }
@@ -179,9 +179,9 @@ private fun LauncherScreen(
                 verifiedSha = sha
                 isReady = true
                 val matchNote = if (sha.equals(ExpectedSha256, ignoreCase = true)) {
-                    "SHA-256 cocok 100% (NALP Europe)"
+                    "SHA-256 cocok 100% (NALE USA)"
                 } else {
-                    "ROM terdeteksi: $title ($gameId) — hash berbeda dari NALP Rev0"
+                    "ROM terdeteksi: $title ($gameId) — hash berbeda dari NALE Rev0"
                 }
                 statusMessage = matchNote
             } else {
@@ -213,7 +213,7 @@ private fun LauncherScreen(
                     letterSpacing = 1.sp
                 )
                 Text(
-                    text = "Native ARM64 Static Recompilation • NALP (Europe En,Fr,De)",
+                    text = "Native ARM64 Static Recompilation • NALE (USA) • Adreno 610 Optimized",
                     color = Color(0xFF9AA4B2),
                     fontSize = 13.sp
                 )

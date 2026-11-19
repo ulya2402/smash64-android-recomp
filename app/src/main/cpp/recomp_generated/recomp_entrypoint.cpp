@@ -20,7 +20,7 @@
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
 
 int main(int argc, char* argv[]) {
-    std::string gameDir = "/data/data/com.recomp.smash64/files/games/nalp";
+    std::string gameDir = "/data/data/com.recomp.smash64/files/games/nale";
     if (argc > 1 && argv[1] != nullptr) {
         gameDir = argv[1];
     }
@@ -41,7 +41,7 @@ int main(int argc, char* argv[]) {
     }
 
     SDL_Window* window = SDL_CreateWindow(
-        "Super Smash Bros. (NALP) - Native ARM64",
+        "Super Smash Bros. (NALE) - Native ARM64",
         1280, 720,
         SDL_WINDOW_VULKAN | SDL_WINDOW_FULLSCREEN | SDL_WINDOW_RESIZABLE);
     if (!window) {
@@ -68,7 +68,7 @@ int main(int argc, char* argv[]) {
     input.setTouchOverlayVisible(cfg.touchControlsEnabled);
 
     std::array<uint64_t, 32> gpr{};
-    if (auto entry = smash64::recomp::lookupFunction(smash64::recomp::kNalpEntrypoint)) {
+    if (auto entry = smash64::recomp::lookupFunction(smash64::recomp::kNaleEntrypoint)) {
         entry(memory.rdram(), gpr.data());
     }
 
@@ -91,12 +91,12 @@ int main(int argc, char* argv[]) {
         if (renderer.beginFrame(width, height)) {
             if (showHud) {
                 ImGui::SetNextWindowPos(ImVec2(static_cast<float>(width) * 0.25f, 24.0f), ImGuiCond_FirstUseEver);
-                ImGui::Begin("Smash 64 Recomp (NALP)", &showHud, ImGuiWindowFlags_AlwaysAutoResize);
+                ImGui::Begin("Smash 64 Recomp (NALE)", &showHud, ImGuiWindowFlags_AlwaysAutoResize);
                 ImGui::Text("GPU: %s (%s)", renderer.activeGpuName(),
                             renderer.isUsingCustomTurnip() ? "Turnip" : "System");
                 ImGui::Text("ROM: %zu MB loaded in RDRAM | Entry: 0x%08X",
                             memory.romSize() / (1024 * 1024),
-                            smash64::recomp::kNalpEntrypoint);
+                            smash64::recomp::kNaleEntrypoint);
                 ImGui::TextColored(ImVec4(1.0f, 0.8f, 0.3f, 1.0f),
                                    "Runtime Shell Active: N64Recomp/RT64 game funcs not yet linked.");
 

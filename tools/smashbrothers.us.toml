@@ -1,0 +1,20 @@
+# N64Recomp configuration for Super Smash Bros. (USA)
+# Game ID: NALE | Region: NTSC-U | Revision: 0
+# Expected SHA-256 (.z64): 15592E79D3C5295CEF4371D4992F0BD25BEC2102FC29644C93E682F7EA99EF3D
+
+[input]
+entrypoint = 0x80100400
+# Point to Smash64Recomp/Smash64RecompSyms + your local BYOF USA ROM when running N64Recomp CLI
+symbols_file_path = "syms/smashbrothers.us.syms.toml"
+rom_file_path = "D:/Download/Super Smash Bros. (USA)/Super Smash Bros. (USA).z64"
+output_func_path = "../app/src/main/cpp/recomp_generated/funcs"
+
+[patches]
+stubs = [
+    "osInvalDCache",
+    "osInvalICache",
+    "osWritebackDCache",
+    "osWritebackDCacheAll"
+]
+
+ignored = []

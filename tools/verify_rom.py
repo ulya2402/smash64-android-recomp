@@ -5,7 +5,7 @@ import hashlib
 import sys
 from pathlib import Path
 
-EXPECTED_NALP_SHA256 = "DDC65284E78C301F764D2F5E1E01DE9A017225867A0B9326B73057FB8BDB1DAF"
+EXPECTED_NALE_SHA256 = "15592E79D3C5295CEF4371D4992F0BD25BEC2102FC29644C93E682F7EA99EF3D"
 
 
 def main() -> int:
@@ -31,7 +31,7 @@ def main() -> int:
     print(f"Title  : {title}")
     print(f"GameID : {game_id}")
     print(f"SHA256 : {sha256}")
-    print(f"Match  : {sha256 == EXPECTED_NALP_SHA256}")
+    print(f"Match  : {sha256 == EXPECTED_NALE_SHA256}")
     return 0
 
 

@@ -96,7 +96,9 @@ class MainActivity : ComponentActivity() {
             fd = fd,
             outputDir = gameDir.absolutePath,
             callback = NativeBridge.ProgressCallback { pct, msg ->
-                onProgress(pct, msg)
+                runOnUiThread {
+                    onProgress(pct, msg)
+                }
             }
         )
     }

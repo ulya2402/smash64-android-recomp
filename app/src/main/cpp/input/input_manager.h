@@ -3,6 +3,7 @@
 #include <SDL3/SDL.h>
 
 #include <cstdint>
+#include <string>
 #include <unordered_map>
 
 namespace smash64::input {
@@ -37,21 +38,41 @@ struct TouchPoint {
     int assignedRole = 0;  // 0=none, 1=analog, 2=buttons
 };
 
+struct TouchLayoutConfig {
+    float stickX = 0.16f;
+    float stickY = 0.68f;
+    float abX = 0.84f;
+    float abY = 0.70f;
+    float cPadX = 0.78f;
+    float cPadY = 0.42f;
+    float dpadX = 0.30f;
+    float dpadY = 0.82f;
+    float scale = 1.0f;
+    float opacity = 0.78f;
+};
+
 class InputManager {
 public:
-    void init();
+    void init(const std::string& gameDir);
     void shutdown();
     void processEvent(const SDL_Event& ev);
-    void renderTouchOverlay(int displayW, int displayH, bool enabled);
+    void renderTouchOverlay(int displayW, int displayH, bool enabled, bool editMode);
+
+    void loadLayout();
+    void saveLayout() const;
 
     N64ControllerState state() const { return mergedState_; }
     bool hasPhysicalGamepad() const { return gamepad_ != nullptr; }
     bool touchOverlayVisible() const { return touchVisible_; }
     void setTouchOverlayVisible(bool v) { touchVisible_ = v; }
+    TouchLayoutConfig& layout() { return layout_; }
 
 private:
     void updateMergedState();
+    bool isRealGamepad(SDL_JoystickID id) const;
 
+    std::string layoutPath_;
+    TouchLayoutConfig layout_{};
     SDL_Gamepad* gamepad_ = nullptr;
     N64ControllerState gamepadState_{};
     N64ControllerState touchState_{};

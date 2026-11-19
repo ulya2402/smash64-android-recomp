@@ -25,6 +25,7 @@ int main(int argc, char* argv[]) {
         gameDir = argv[1];
     }
 
+    SDL_SetHint(SDL_HINT_TOUCH_MOUSE_EVENTS, "1");
     if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMEPAD | SDL_INIT_EVENTS)) {
         LOGE("SDL_Init failed: %s", SDL_GetError());
         return 1;
@@ -63,7 +64,7 @@ int main(int argc, char* argv[]) {
     audio.start();
 
     smash64::input::InputManager input;
-    input.init();
+    input.init(cfg.gameDir);
     input.setTouchOverlayVisible(cfg.touchControlsEnabled);
 
     std::array<uint64_t, 32> gpr{};
@@ -73,8 +74,8 @@ int main(int argc, char* argv[]) {
 
     bool running = true;
     bool showHud = true;
+    bool editLayout = false;
     Uint64 lastTick = SDL_GetTicks();
-    uint64_t frameCount = 0;
 
     while (running) {
         SDL_Event ev;
@@ -89,34 +90,55 @@ int main(int argc, char* argv[]) {
         int width = 0, height = 0;
         if (renderer.beginFrame(width, height)) {
             if (showHud) {
-                ImGui::SetNextWindowPos(ImVec2(24.0f, 24.0f), ImGuiCond_FirstUseEver);
-                ImGui::Begin("Smash 64 Recomp (NALP)", &showHud,
-                             ImGuiWindowFlags_AlwaysAutoResize);
-                ImGui::Text("GPU: %s", renderer.activeGpuName());
-                ImGui::Text("Driver: %s", renderer.isUsingCustomTurnip() ? "Mesa Turnip" : "System Vulkan");
-                ImGui::Text("ROM: %zu MB | Entry: 0x%08X",
+                ImGui::SetNextWindowPos(ImVec2(static_cast<float>(width) * 0.25f, 24.0f), ImGuiCond_FirstUseEver);
+                ImGui::Begin("Smash 64 Recomp (NALP)", &showHud, ImGuiWindowFlags_AlwaysAutoResize);
+                ImGui::Text("GPU: %s (%s)", renderer.activeGpuName(),
+                            renderer.isUsingCustomTurnip() ? "Turnip" : "System");
+                ImGui::Text("ROM: %zu MB loaded in RDRAM | Entry: 0x%08X",
                             memory.romSize() / (1024 * 1024),
                             smash64::recomp::kNalpEntrypoint);
+                ImGui::TextColored(ImVec4(1.0f, 0.8f, 0.3f, 1.0f),
+                                   "Runtime Shell Active: N64Recomp/RT64 game funcs not yet linked.");
+
                 const auto st = input.state();
-                ImGui::Text("Input Stick: (%d, %d) | Btns: 0x%04X",
+                ImGui::Text("N64 Input -> Stick: (%d, %d) | Btns: 0x%04X",
                             st.stickX, st.stickY, st.buttons);
+
                 bool touchOn = input.touchOverlayVisible();
-                if (ImGui::Checkbox("Touch Overlay", &touchOn)) {
+                if (ImGui::Checkbox("N64 Touch Overlay", &touchOn)) {
                     input.setTouchOverlayVisible(touchOn);
                     cfg.touchControlsEnabled = touchOn;
                     smash64::shim::saveRuntimeConfig(cfg);
                 }
+                ImGui::SameLine();
+                ImGui::Checkbox("Customize Layout", &editLayout);
+
+                if (editLayout) {
+                    auto& l = input.layout();
+                    ImGui::SliderFloat("Scale", &l.scale, 0.65f, 1.40f);
+                    ImGui::SliderFloat("Opacity", &l.opacity, 0.25f, 1.0f);
+                    ImGui::SliderFloat("Stick X", &l.stickX, 0.08f, 0.35f);
+                    ImGui::SliderFloat("Stick Y", &l.stickY, 0.40f, 0.85f);
+                    ImGui::SliderFloat("A/B X", &l.abX, 0.65f, 0.92f);
+                    ImGui::SliderFloat("A/B Y", &l.abY, 0.45f, 0.85f);
+                    ImGui::SliderFloat("C-Pad X", &l.cPadX, 0.62f, 0.90f);
+                    ImGui::SliderFloat("C-Pad Y", &l.cPadY, 0.25f, 0.65f);
+                    if (ImGui::Button("Save Touch Layout")) {
+                        input.saveLayout();
+                        editLayout = false;
+                    }
+                }
+
                 if (ImGui::Button("Quit to Launcher")) {
                     running = false;
                 }
                 ImGui::End();
             }
 
-            input.renderTouchOverlay(width, height, cfg.touchControlsEnabled);
+            input.renderTouchOverlay(width, height, cfg.touchControlsEnabled, editLayout);
             renderer.endFrame();
         }
 
-        ++frameCount;
         if (cfg.fpsLimit > 0) {
             const Uint64 targetMs = 1000ULL / static_cast<Uint64>(cfg.fpsLimit);
             const Uint64 now = SDL_GetTicks();

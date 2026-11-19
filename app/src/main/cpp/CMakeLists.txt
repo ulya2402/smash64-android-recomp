@@ -94,8 +94,8 @@ set(BUILD_SHARED_LIBS OFF)
 FetchContent_Declare(
     libchdr
     GIT_REPOSITORY https://github.com/rtissera/libchdr.git
-    GIT_TAG 8968155a1410b9408b55d86e92055fa220987633
-    GIT_SHALLOW FALSE
+    GIT_TAG v0.3.0
+    GIT_SHALLOW TRUE
 )
 FetchContent_MakeAvailable(libchdr)
 set(BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS_SAVED})

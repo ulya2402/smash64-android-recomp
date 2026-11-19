@@ -146,7 +146,7 @@ target_include_directories(game_recomp PRIVATE
 
 target_link_libraries(game_recomp PRIVATE
     SDL3::SDL3
-    oboe::oboe
+    oboe
     imgui_sdl_vulkan
     glm::glm
     vulkan
